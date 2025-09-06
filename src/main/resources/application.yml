@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: cloud-gateway-mvc
+  cloud:
+    gateway:
+      mvc:
+        # Default filters to add headers to outgoing requests
+        default-filters:
+          # Dynamic headers computed per request using SpEL
+          - AddRequestHeader=X-Request-Id, "#{T(java.util.UUID).randomUUID()}"
+          - AddRequestHeader=X-Request-Time, "#{T(java.time.OffsetDateTime).now()}"
+        routes:
+          - id: service-a
+            uri: http://localhost:8081
+            predicates:
+              - Path=/service-a/**
+            filters:
+              - StripPrefix=1
+          - id: service-b
+            uri: http://localhost:8082
+            predicates:
+              - Path=/service-b/**
+            filters:
+              - StripPrefix=1
