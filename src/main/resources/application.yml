@@ -7,11 +7,6 @@ spring:
   cloud:
     gateway:
       mvc:
-        # Default filters to add headers to outgoing requests
-        default-filters:
-          # Dynamic headers computed per request using SpEL
-          - AddRequestHeader=X-Request-Id, "#{T(java.util.UUID).randomUUID()}"
-          - AddRequestHeader=X-Request-Time, "#{T(java.time.OffsetDateTime).now()}"
         routes:
           - id: service-a
             uri: http://localhost:8081
@@ -19,9 +14,14 @@ spring:
               - Path=/service-a/**
             filters:
               - StripPrefix=1
-          - id: service-b
-            uri: http://localhost:8082
-            predicates:
-              - Path=/service-b/**
-            filters:
-              - StripPrefix=1
+
+# Custom property to hold timeout values mapped to route IDs
+custom:
+  gateways:
+    timeouts:
+      default:
+        read-timeout: 33000
+        connect-timeout: 33000
+      service-a:
+        read-timeout: 2000
+        connect-timeout: 2000

@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.3'
+    id 'org.springframework.boot' version '3.3.12'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.httpcomponents.client5:httpclient5'
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway-mvc'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -26,7 +27,7 @@ dependencies {
 
 // Spring Cloud BOM for compatibility with Boot 3.3.x
 ext {
-    set('springCloudVersion', '2023.0.4')
+    set('springCloudVersion', '2023.0.5')
 }
 
 dependencyManagement {
