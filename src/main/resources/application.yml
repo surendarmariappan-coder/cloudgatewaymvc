@@ -7,6 +7,9 @@ spring:
   cloud:
     gateway:
       mvc:
+        http-client:
+          read-timeout: 33000
+          connect-timeout: 33000
         routes:
           - id: service-a
             uri: http://localhost:8081
@@ -14,14 +17,27 @@ spring:
               - Path=/service-a/**
             filters:
               - StripPrefix=1
-
-# Custom property to hold timeout values mapped to route IDs
-custom:
-  gateways:
-    timeouts:
-      default:
-        read-timeout: 33000
-        connect-timeout: 33000
-      service-a:
-        read-timeout: 2000
-        connect-timeout: 2000
+              - name: Timeout
+                args:
+                  responseTimeout: 2000
+                  connectTimeout: 2000
+          - id: service-b
+            uri: http://localhost:8081
+            predicates:
+              - Path=/service-b/**
+            filters:
+              - StripPrefix=1
+              - name: Timeout
+                args:
+                  responseTimeout: 3000
+                  connectTimeout: 3000
+          - id: service-c
+            uri: http://localhost:8081
+            predicates:
+              - Path=/service-c/**
+            filters:
+              - StripPrefix=1
+              - name: Timeout
+                args:
+                  responseTimeout: 4000
+                  connectTimeout: 4000
